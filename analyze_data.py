@@ -23,10 +23,10 @@ def read_data(data):
     return sizes_mat, times_dot
 
 
-def plot_dependency(sizes_mat, times_dot):
+def plot_dependency(sizes_mat, times_dot, name_figure):
     plt.figure(figsize=(7, 10))
     plt.plot(sizes_mat, times_dot, marker='o', linestyle='-')
-    plt.title('Зависимость размера матрицы и времени выполнения')
+    plt.title(f'Зависимость размера матрицы и времени выполнения для потока {name_figure}')
     plt.xlabel('Размер матрицы')
     plt.ylabel('Время выполнения (секунды)')
 
@@ -36,12 +36,12 @@ def plot_dependency(sizes_mat, times_dot):
     for size, time in zip(sizes_mat, times_dot):
         plt.text(size, time, f'{time:.6f}', fontsize=8, ha='left', va='bottom')
 
-
     plt.show()
 
 
 if __name__ == "__main__":
-    filename = FOLDER + f"matrix\\Working_Time\\Time.txt"
-    sizes, times = read_data(filename)
-    plot_dependency(sizes, times)
-
+    num_threads_values = [2, 4, 8, 16]
+    for num_threads in num_threads_values:
+        filename = FOLDER + f"matrix\\Working_Time\\Time_{num_threads}.txt"
+        sizes, times = read_data(filename)
+        plot_dependency(sizes, times, num_threads)
