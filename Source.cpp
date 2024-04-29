@@ -50,9 +50,9 @@ public:
 		std::uniform_int_distribution<int> dis(-100, 100);
 
 #pragma omp parallel for collapse(2)
-		for (size_t i = 0; i < _size; ++i)
+		for (int i = 0; i < _size; ++i)
 		{
-			for (size_t j = 0; j < _size; ++j)
+			for (int j = 0; j < _size; ++j)
 			{
 				_data[i][j] = dis(gen);
 			}
@@ -61,9 +61,9 @@ public:
 
 	void print() const
 	{
-		for (size_t i = 0; i < _size; ++i)
+		for (int i = 0; i < _size; ++i)
 		{
-			for (size_t j = 0; j < _size; ++j)
+			for (int j = 0; j < _size; ++j)
 			{
 				std::cout << _data[i][j] << '\t';
 			}
@@ -81,12 +81,12 @@ public:
 		Matrix result(_size);
 
 #pragma omp parallel for collapse(2)
-		for (size_t i = 0; i < _size; ++i)
+		for (int i = 0; i < _size; ++i)
 		{
-			for (size_t j = 0; j < _size; ++j)
+			for (int j = 0; j < _size; ++j)
 			{
 				int sum = 0;
-				for (size_t k = 0; k < _size; ++k)
+				for (int k = 0; k < _size; ++k)
 				{
 					sum += _data[i][k] * rhs._data[k][j];
 				}
@@ -105,9 +105,9 @@ public:
 			throw std::runtime_error("Невозможно открыть файл для записи.");
 		}
 		out << _size << std::endl;
-		for (size_t i = 0; i < _size; ++i)
+		for (int i = 0; i < _size; ++i)
 		{
-			for (size_t j = 0; j < _size; ++j)
+			for (int j = 0; j < _size; ++j)
 			{
 				out << _data[i][j] << ' ';
 			}
@@ -130,9 +130,9 @@ public:
 		}
 		_data.clear();
 		_data.resize(_size, std::vector<int>(_size, 0));
-		for (size_t i = 0; i < _size; ++i)
+		for (int i = 0; i < _size; ++i)
 		{
-			for (size_t j = 0; j < _size; ++j)
+			for (int j = 0; j < _size; ++j)
 			{
 				if (!(file >> _data[i][j]))
 				{
@@ -226,10 +226,12 @@ int main()
 						end = std::chrono::high_resolution_clock::now();
 						duration = end - begin;
 
+						
 						std::stringstream result_file;
 						result_file << folder_result << "result_" << num_threads << "_" << size << ".txt";
 						result.save_file(result_file.str());
 
+						
 						std::ofstream out;
 						out.open(folder_statistics + "Time_" + std::to_string(num_threads) + ".txt", std::ios_base::app);
 						if (out.is_open())
